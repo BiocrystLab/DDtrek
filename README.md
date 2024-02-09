@@ -17,4 +17,4 @@ and (optional) electron density maps for ligands.
     
     pip.main(['install','gemmi'])
     ```
-- use PyMOL build-in plugin manager to install DDtrek_plugin
+- use PyMOL build-in plugin manager to install `DDtrek_plugin.py`
