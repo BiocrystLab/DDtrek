@@ -1,0 +1,16 @@
+# From "Crystallographic and electrophilic fragment screening of the SARS-CoV-2 main protease"
+# Sites referred as in Supplementary table 2
+
+#REF reference.pdb
+
+#G siteA
+5r7y/5r7y.pdb 5r7y/5r7y.mtz A 1001 5r7y
+5r81/5r81.pdb 5r81/5r81.mtz A 1001 5r81
+5rf6/5rf6.pdb 5rf6/5rf6.mtz A 404 5rf6
+
+#G siteB
+5reu/5reu.pdb 5reu/5reu.mtz A 404 5reu
+5rhb/5rhb.pdb 5rhb/5rhb.mtz A 406 5rhb
+
+#G siteX
+5re6/5re6.pdb 5re6/5re6.mtz A 404 5re6

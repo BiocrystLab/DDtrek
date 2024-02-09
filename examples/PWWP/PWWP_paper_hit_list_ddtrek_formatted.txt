@@ -1,0 +1,30 @@
+#G Xray
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F016/pwwp_fdb16_Sep19.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F016/pwwp_fdb16_Sep19.mtz	B	101 F016 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F023/pwwp_fdb23_Sep19.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F023/pwwp_fdb23_Sep19.mtz	B	101 F023 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F074/pwwpc64s_f74_MME_5mM.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F074/pwwpc64s_f74_MME_5mM.mtz	B	101 F074 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F096/pwwp_c64s_f096_MME.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/F096/pwwp_c64s_f096_MME.mtz	B	101 F096
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/x0060_F171/refine_3.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group1/x0060_F171/refine_3.mtz	D	101 F171 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/cdb9/pwwp_cdb9_Dec19.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/cdb9/pwwp_cdb9_Dec19.mtz	B	601 CDB9
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F037/pwwp_fdb37_Feb20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F037/pwwp_fdb37_Feb20.mtz	B 601	F037
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F043/pwwp_fdb43_Jul20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F043/pwwp_fdb43_Jul20.mtz	B	601 F043 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F055/pwwp_fdb55_Jul20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F055/pwwp_fdb55_Jul20.mtz	B	601 F055 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F076/pwwpc64s_f76_MME_10mM.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F076/pwwpc64s_f76_MME_10mM.mtz	B	101 F076
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F104/pwwpc64s_F104_MME_C2.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F104/pwwpc64s_F104_MME_C2.mtz	B	101 F104
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F160/F160_EG_refine_3.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F160/F160_EG_refine_3.mtz	C	101 F160
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F253/pwwpc64s_F253_MME_C2.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/F253/pwwpc64s_F253_MME_C2.mtz	B	101 F253
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/x0380_Z285782452/refine_3.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/x0380_Z285782452/refine_3.mtz	D	101 Z285782452 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/x0407_F181/refine_3.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group2/x0407_F181/refine_3_F181.mtz	D	101 F181 B
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/cdb24/pwwp_cdb24_Dec19.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/cdb24/pwwp_cdb24_dec19.mtz	A	601 CDB24
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/cdb41/pwwp_cdb41_Feb20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/cdb41/pwwp_cdb41_Feb20.mtz	A	101 CDB41
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F046/pwwp_fdb46_Jul20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F046/pwwp_fdb46_Jul20.mtz	B 601	F046
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F047/pwwp_fdb47_Jul20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F047/pwwp_fdb47_Jul20.mtz	C	601 F047
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F048/pwwp_fdb48_Jul20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F048/pwwp_fdb48_Jul20.mtz	C	601 F048
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F095/pwwp_c64s_f095_MME.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group4/F095/pwwp_c64s_f095_MME.mtz	C	101 F095
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/cdb17/pwwp_cdb17_Dec19.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/cdb17/pwwp_cdb17_Dec19.mtz	A	101 CDB17
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F040/pwwp_fdb40_Feb20.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F040/pwwp_fdb40_Feb20.mtz	C	101 F040
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F106/pwwpc64s_F106_MME_C2.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F106/pwwpc64S_F106_MME_C2.mtz	A	101 F106
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F115/refmac6.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F115/refmac6.mtz	B	101 F115
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F258/pwwpc64s_F258_MME_C2.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F258/pwwpc64s_F258_MME_C2.mtz	A 101	F258
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F278/F278_C2type1.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F278/F278_C2type1.mtz	B	101 F278
+/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F325/F325_C2type1.pdb	/home/thibault/projects/gpwwp/Papers/PWWP_screening/xray_pdb/Group5.1/F325/F325_C2type1.mtz	B	101 F325
+
