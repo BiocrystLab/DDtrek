@@ -12,6 +12,8 @@ and (optional) electron density maps for ligands.
 # INSTALLATION:
 - open PyMOL
 - install Gemmi module from PyMOL command line:
-    `import pip`
-    `pip.main(['install','gemmi'])`
+    ```import pip
+    
+    pip.main(['install','gemmi'])
+    ```
 - use PyMOL build-in plugin manager to install DDtrek_plugin
