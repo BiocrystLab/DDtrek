@@ -12,7 +12,8 @@ and (optional) electron density maps for ligands.
 # INSTALLATION:
 - open PyMOL
 - install Gemmi module from PyMOL command line:
-    ```import pip
+    ```python
+    import pip
     
     pip.main(['install','gemmi'])
     ```
