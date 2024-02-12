@@ -94,11 +94,12 @@ def ddtrek(input_filename: str) -> None:
     dname = os.path.dirname(abspath)
     fname = os.path.basename(input_filename)
     os.chdir(dname)
+    assert (os.access(dname, os.W_OK)), "Folder with DDtrek input file should be writable"
     ## get the list of preloaded structures in currently opened PyMOL window
     preloaded_structures = cmd.get_object_list()
 
     # USER input file with user-specified structures and ligand selectors
-    pdb_mtz_list = open(fname,'r').readlines() 
+    pdb_mtz_list = open(fname,'r').readlines()
 
     ### Iterate over entries in input list and align them against reference structure
 
