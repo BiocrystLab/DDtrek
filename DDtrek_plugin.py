@@ -4,7 +4,6 @@ from pymol import cmd
 import gemmi
 
 
-# TODO: check for gemmi and install it in case of ImportError
 '''
 # DDTREK is a script for automatic generation of PyMOL session, which will 
 contain a reference structure, aligned structures 
@@ -29,8 +28,13 @@ Algorithm of DDtrek:
 2) iterate over structures: extract specified chains and aligns them against reference structure
 3) for each ligand create density map object. 
 
-TODO: Draw maps on request by type. If not in the list - print list of maps, delete output folder and exit
-Right now the script generates meshes only for 2FOFC maps.
+TODO: 
+- Draw maps on request by type. If not in the list - print list of maps, delete output folder and exit. Right now the script generates meshes only for 2FOFC maps.
+- automate map drawing by detecting required map type
+- Automate gemmi installation: import gemmi and run pip install gemmi in case of ImportError
+- Implement cut-off distances for coordinates and maps as constants
+- Add GUI
+- write temporary files ligand.pdb and masked.ccp4 to the folder specified by TMP environment variable
 
 '''
 
@@ -44,8 +48,7 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
     :mapobjname: arbitrary name of map entry
     :margin: map cutoff distance around the ligand in angstroms
     The subroutine extracts map fragment around ligand atoms using the following protocol
-    NOTE: requires rw access to the folder with
-    #TODO: add option to specify temporary folder for map and ligand
+    NOTE: requires rw access to the folder with ddtrek file
 
     Algorithm:
     1. Generate 2Fo-Fc map from the specified MTZ file :mtzfilename:
@@ -54,14 +57,14 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
     '''
     mtz = gemmi.read_mtz_file(mtzfilename)
     m = gemmi.Ccp4Map()
-    # ATM only maps with column names 2FOFCWT or FTW are recognized
-    # TODO: automatic recognition of 2FoFc maps in input mtz file or user-specified 
+    # ATM only 2Fo-Fc maps with column names 2FOFCWT or FTW(Refmac5)  are recognized
     try:
-        m.grid = mtz.transform_f_phi_to_map('2FOFCWT','PH2FOFCWT', sample_rate=3)# column labels for mtz with map coefficients
+        m.grid = mtz.transform_f_phi_to_map('2FOFCWT','PH2FOFCWT', sample_rate=3)# column labels for mtz with map coefficients in Phenix and Buster
     except:
-        m.grid = mtz.transform_f_phi_to_map('FWT','PHWT', sample_rate=3)
+        m.grid = mtz.transform_f_phi_to_map('FWT','PHWT', sample_rate=3)#refmac5 default names for map coefficients
     m.update_ccp4_header()
     ligand = gemmi.read_structure('ligand.pdb') # if map file was specified, this file is generated in main body of DDtrek 
+    # command below seems to generate Gb files of map fragments and overflows memory in PyMOL < 2.5
     m.set_extent(ligand.calculate_fractional_box(margin=margin)) #cut map fragment with margin around the ligand
     m.write_ccp4_map('masked.ccp4')
     cmd.load('masked.ccp4', mapobjname)
@@ -95,7 +98,6 @@ def ddtrek(input_filename: str) -> None:
     preloaded_structures = cmd.get_object_list()
 
     # USER input file with user-specified structures and ligand selectors
-    # TODO: read user provided file from GUI interface
     pdb_mtz_list = open(fname,'r').readlines() 
 
     ### Iterate over entries in input list and align them against reference structure
@@ -152,7 +154,7 @@ def ddtrek(input_filename: str) -> None:
             continue
 
         # load map mtz and check extension _ only mtz maps are allowed
-        # TODO: clean this messy line parsing. Now looks terrible BUT it works...
+        # TODO: may be rewrite this section. It looks terrible BUT it works...
         mtz = entry.split()[1]
         if not mtz.lower().endswith('mtz'):
             # if second element is not mtz
@@ -246,7 +248,7 @@ def ddtrek(input_filename: str) -> None:
         # Change colors by random and represenation of the protein
         # select a random color from pymol set of colors and color carbons only
         structure_color = random.choice(cmd.get_color_indices())[0]
-        #TODO fix string formatting to match other strings formatting
+        #TODO fix string formatting to match single stype
         print("Structure " + entry_name + " is colored by " + structure_color)
         cmd.color(structure_color,entry_name + " and elem C")
         cmd.hide('everything', entry_name)
