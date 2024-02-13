@@ -12,5 +12,9 @@
 5reu/5reu.pdb 5reu/5reu.mtz A 404 5reu
 5rhb/5rhb.pdb 5rhb/5rhb.mtz A 406 5rhb
 
+#G siteC(K137)
+# () are invalid for group identifiers and will be stripped or replaced
+5rf0/5rf0.pdb 5rf0/5rf0.mtz A 404 5rf0at_dimer_interface
+
 #G siteX
 5re6/5re6.pdb 5re6/5re6.mtz A 404 5re6
