@@ -7,12 +7,16 @@
 5r7y/5r7y.pdb 5r7y/5r7y.mtz A 1001 5r7y
 5r81/5r81.pdb 5r81/5r81.mtz A 1001 5r81
 5rf6/5rf6.pdb 5rf6/5rf6.mtz A 404 5rf6
+5r82/5r82.pdb 5r82/5r82.mtz A 1001 x0305
 
 #G siteB
 5reu/5reu.pdb 5reu/5reu.mtz A 404 5reu
 5rhb/5rhb.pdb 5rhb/5rhb.mtz A 406 5rhb
+5ret/5ret.pdb 5ret/5ret.mtz A 404 x0770
+5rfh/5rfh.pdb 5rfh/5rfh.mtz A 404 x1334
 
-#G siteC(K137)
+
+#G siteC_K137
 # () are invalid for group identifiers and will be stripped or replaced
 5rf0/5rf0.pdb 5rf0/5rf0.mtz A 404 5rf0at_dimer_interface
 
