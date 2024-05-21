@@ -224,9 +224,9 @@ def ddtrek(input_filename: str) -> None:
         
         # Now select the chain that contains the ligand, ligand itself and everything in 4.5 A radius around the ligand of interest. 
         # Select ligand, all closely situated protein chains and water molecules
-        extracted_selection = "current_entry and (%s or ((bychain %s around 4.5) and polymer) or (%s around 4.5 and resn HOH))" % (ligand_residue,ligand_residue,ligand_residue)
+        tmp_selection = "current_entry and (%s or ((bychain %s around 4.5) and polymer) or (%s around 4.5 and resn HOH))" % (ligand_residue,ligand_residue,ligand_residue)
         # now add symmetry mates to it
-        #extracted_selection = "(%s) or symmetry*" % tmp_selection
+        extracted_selection = "(%s) or symmetry*" % tmp_selection
 
 
         if DEBUG:
