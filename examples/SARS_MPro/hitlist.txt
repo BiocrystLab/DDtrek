@@ -1,5 +1,5 @@
 # From "Crystallographic and electrophilic fragment screening of the SARS-CoV-2 main protease"
-# Sites referred as in Supplementary table 2
+# Sites referred to as in Supplementary table 2
 
 #REF reference.pdb
 
@@ -17,7 +17,6 @@
 
 
 #G siteC_K137
-# () are invalid for group identifiers and will be stripped or replaced
 5rf0/5rf0.pdb 5rf0/5rf0.mtz A 404 5rf0at_dimer_interface
 
 #G siteX
