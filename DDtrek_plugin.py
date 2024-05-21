@@ -1,7 +1,13 @@
 import os
 import random
 from pymol import cmd
-import gemmi
+
+try:
+    import gemmi
+except:
+    import pip
+    print('Installing missing Gemmi library...')
+    pip.main(['install','gemmi'])
 
 
 '''
