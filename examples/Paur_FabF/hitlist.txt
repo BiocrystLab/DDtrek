@@ -1,0 +1,4 @@
+#REF /Users/evgenii/Documents/PROGRAMMING/DDtrek/Github/examples/Paur_FabF/5sno/5sno.pdb
+#G site1
+/Users/evgenii/Documents/PROGRAMMING/DDtrek/Github/examples/Paur_FabF/5sno/5sno.pdb /Users/evgenii/Documents/PROGRAMMING/DDtrek/Github/examples/Paur_FabF/5sno/5sno.mtz A 501 5sno
+/Users/evgenii/Documents/PROGRAMMING/DDtrek/Github/examples/Paur_FabF/5snp/5snp.pdb /Users/evgenii/Documents/PROGRAMMING/DDtrek/Github/examples/Paur_FabF/5snp/5snp.mtz A 501 5snp
