@@ -79,7 +79,7 @@ def ddtrek(input_filename: str) -> None:
 
     Aligns structures from input file to the reference structure. Optionally generates electron density maps
     
-    See publication: DDtrek (in process...2024)
+    See publication: DDtrek (2024)
 
     USAGE
 
@@ -135,7 +135,15 @@ def ddtrek(input_filename: str) -> None:
         # Load reference structure after #REF key if reference is missing from PyMOL session
         if entry.startswith('#REF') and ('reference' not in preloaded_structures):
             ref_pdb = entry.split()[1]
-            cmd.load(ref_pdb,'reference')
+            cmd.load(ref_pdb,'tmp_reference')
+            # if reference PDB has >1 chains or chain is specified in DDtrek.in
+            # identify a single protein chain for use as a reference for alignment:
+            if len(entry.split()) == 3:
+                reference_chain = entry.split()[2]
+            else:
+                reference_chain = cmd.get_chains('tmp_reference and polymer')[0]
+            cmd.create('reference',f'tmp_reference and polymer and chain {reference_chain}')
+            cmd.delete('tmp_reference')
             continue
 
         if entry.startswith('# ') or len(entry) == 0: # skip comments and empty lines
@@ -216,9 +224,10 @@ def ddtrek(input_filename: str) -> None:
         
         # Now select the chain that contains the ligand, ligand itself and everything in 4.5 A radius around the ligand of interest. 
         # Select ligand, all closely situated protein chains and water molecules
-        tmp_selection = "current_entry and (%s or ((bychain %s around 4.5) and polymer) or (%s around 4.5 and resn HOH))" % (ligand_residue,ligand_residue,ligand_residue)
+        extracted_selection = "current_entry and (%s or ((bychain %s around 4.5) and polymer) or (%s around 4.5 and resn HOH))" % (ligand_residue,ligand_residue,ligand_residue)
         # now add symmetry mates to it
-        extracted_selection = "(%s) or symmetry*" % tmp_selection
+        #extracted_selection = "(%s) or symmetry*" % tmp_selection
+
 
         if DEBUG:
             print('selection:%s' % extracted_selection)
@@ -237,7 +246,7 @@ def ddtrek(input_filename: str) -> None:
             print('Alignment selection:%s\n' % alignment_selection)
         cmd.align(alignment_selection, 'reference and name CA') # align using C-alpha atoms to reference
 
-        #Remove loaded PDB and generated symmetry mates
+        #Cleanup. Remove loaded PDB and generated symmetry mates
         cmd.delete('current_entry') # remove original PDB
         cmd.delete('symmetry*') # remove symmetry mates
         
