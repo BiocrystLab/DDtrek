@@ -19,3 +19,6 @@ and (optional) electron density maps for ligands.
 - Click on the top menu "Plugin" and then on "Plugin manager".
 - click on the tab "Install New Plugin", click on "Choose file..." and select the file `DDtrek_plugin.zip` that you downloaded earlier.
 
+
+# TROUBLESHOOTING
+- Most commonly occuring error is `Selector-Error: Invalid selection name "current_entry".` with PyMOL failing to create a new object. It is not exacly clear, what causes this error. Solution: close and open PyMOL, and rerun DDtrek
