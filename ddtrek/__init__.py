@@ -13,7 +13,7 @@ import os, sys
 
 # import fails without adjustments to sys.path
 plugin_dir = os.path.dirname(__file__)
-sys.path.append(plugin_dir)
+sys.path.insert(0,  plugin_dir)
 
 from ddtrek import ddtrek
 
@@ -83,7 +83,6 @@ def make_dialog():
         '''
         fname = form.input_filename.text()
         if fname:
-            print(type(fname))
             print(f'Opening {fname}...')
             ddtrek(fname)
 
