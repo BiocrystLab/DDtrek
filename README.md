@@ -10,5 +10,8 @@ and (optional) electron density maps for ligands.
     See examples folder for details
 
 # INSTALLATION:
-- open PyMOL
-- use PyMOL build-in plugin manager to install `DDtrek_plugin.py`
+- go to https://github.com/BiocrystLab/DDtrek and download the file `DDtrek_plugin.zip`
+- open PyMOL (version 2.5 or higher)
+- Click on the top menu "Plugin" and then on "Plugin manager".
+- click on the tab "Install New Plugin", click on "Choose file..." and select the file `DDtrek_plugin.zip` that you downloaded earlier.
+
