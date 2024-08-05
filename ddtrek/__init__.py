@@ -67,7 +67,11 @@ def make_dialog():
         """
         curr_dir = os.getcwd()
 
-        fname = getOpenFileNames(dialog, 'Open DDtrek input file...', curr_dir)[0][0]
+        try:
+            fname = getOpenFileNames(dialog, 'Open DDtrek input file...', curr_dir)[0][0]
+        except IndexError:
+            # to supress index error if no file was selected
+            fname = ''
 
         if fname:
             form.input_filename.setText(fname)
@@ -79,6 +83,7 @@ def make_dialog():
         '''
         fname = form.input_filename.text()
         if fname:
+            print(type(fname))
             print(f'Opening {fname}...')
             ddtrek(fname)
 
