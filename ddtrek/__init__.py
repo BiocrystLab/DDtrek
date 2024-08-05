@@ -79,12 +79,13 @@ def make_dialog():
 
     def run():
         '''
-        TODO:run ddtrek here
+        run ddtrek using filename in text field
         '''
         fname = form.input_filename.text()
         if fname:
             print(f'Opening {fname}...')
             ddtrek(fname)
+            dialog.close()
 
     # hook up button callbacks
     form.button_open.clicked.connect(run)
