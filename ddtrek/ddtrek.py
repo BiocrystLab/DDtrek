@@ -97,7 +97,7 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
     :DEBUG: produces extra output into PyMOL terminal
     '''
 
-    #Change working directory to location of input file
+    #Change working directory to location of input file. Folder should be writable
     abspath = os.path.abspath(input_filename)
     dname = os.path.dirname(abspath)
     fname = os.path.basename(input_filename)
@@ -105,6 +105,8 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
     assert (os.access(dname, os.W_OK)), "Folder with DDtrek input file should be writable"
     ## get the list of preloaded structures in currently opened PyMOL window
     preloaded_structures = cmd.get_object_list()
+    # set default group name to avoid errors if user forgot to specify the name by #G
+    group_name = 'default'
 
     # USER input file with user-specified structures and ligand selectors
     pdb_mtz_list = open(fname,'r').readlines()
@@ -167,7 +169,7 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
         pdb = entry.split()[0]
         # discard non-PDB lines and malformed lines
         if not pdb.lower().endswith('pdb') or (pdb.lower().endswith('pdb') and len(entry.split())) < 4:
-            print('Malformed line with PDB %s . Skipping...' % pdb )
+            print('Malformed line with PDB %s . Check pdb filename and presence of all elements. Skipping...' % pdb )
             continue
 
         # load map mtz and check extension _ only mtz maps are allowed
@@ -245,7 +247,10 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
         cmd.create(entry_name, selection=extracted_selection,
                     source_state=0, target_state=0,discrete=0)
 
-
+        # Prior to alignment, check that reference is loaded. If not, create reference from 1st polymer chain of the currently loaded entry
+        if 'reference' not in cmd.get_object_list():
+            reference_chain = cmd.get_chains('current_entry and polymer')[0]
+            cmd.create('reference',f'current_entry and polymer and chain {reference_chain}')
         #ALIGN newly created structure to reference using all CA atoms
         if align_chain:
             alignment_selection = "%s and polymer and chain %s and name CA" % (entry_name, align_chain)
@@ -255,7 +260,7 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
             print('Alignment selection:%s\n' % alignment_selection)
         cmd.align(alignment_selection, 'reference and name CA') # align using C-alpha atoms to reference
 
-        #Cleanup. Remove loaded PDB and generated symmetry mates
+        #Cleanup. Remove temporary PDB and its generated symmetry mates
         cmd.delete('current_entry') # remove original PDB
         cmd.delete('symmetry*') # remove symmetry mates
         
