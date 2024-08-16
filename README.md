@@ -21,4 +21,10 @@ and (optional) electron density maps for ligands.
 
 
 # TROUBLESHOOTING
-- Most commonly occuring error is `Selector-Error: Invalid selection name "current_entry".` with PyMOL failing to create a new object. It is not exacly clear, what causes this error. Solution: close and open PyMOL, and rerun DDtrek
+`DDtrek` relies on user for correct formatting of input file. In case of trouble, check that input file formatted properly.
+
+
+Some common errors:
+
+- Error `Selector-Error: Invalid selection name "current_entry".` with PyMOL failing to create a new object. It is not exacly clear, what causes this error. **Solution**: close and open PyMOL, and rerun DDtrek
+- Error `gemmi is not definded`: `DDtrek` attempts to install dependency automatically using `pip`. This might fail on Linux machines if user doesn't have access to PyMOL installation, e.g. when PyMOL installed using package manager. **Solution**: Ask system administrator to install `gemmi` package using `sudo pip install gemmi`

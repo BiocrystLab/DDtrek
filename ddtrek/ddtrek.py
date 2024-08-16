@@ -4,7 +4,7 @@ from pymol import cmd
 
 try:
     import gemmi
-except:
+except ImportError:
     import pip
     print('Installing missing Gemmi library...')
     pip.main(['install','gemmi'])
