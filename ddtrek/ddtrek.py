@@ -293,7 +293,12 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
         load_mtz_map_fragment(mtz, mtz_name)
         cmd.matrix_copy(entry_name, mtz_name)
         # pymol isomesh generation map at 1 sigma around ligand in 1.8 angstrom radius
-        cmd.isomesh(map_name, mtz_name, 1, ligand_selection, carve=1.8)
+        if 'omit' in map_name:
+            #contour omit maps at 3 sigma
+            cmd.isomesh(map_name, mtz_name, 3, ligand_selection, carve=1.8)
+        else:
+            #2Fo-Fc maps are contoured at 1 sigma level
+            cmd.isomesh(map_name, mtz_name, 1, ligand_selection, carve=1.8)
 
         # MAP REPRESENTATION 
         # color will match color of carbon atoms
