@@ -33,14 +33,10 @@ Algorithm of DDtrek:
 TODO: 
 - Draw maps on request by type. If not in the list - print list of maps, delete output folder and exit. Right now the script generates meshes only for 2FOFC maps.
 - automate map drawing by detecting required map type
-- Automate gemmi installation: import gemmi and run pip install gemmi in case of ImportError
 - Implement cut-off distances for coordinates and maps as constants
-- Add GUI
 - write temporary files ligand.pdb and masked.ccp4 to the folder specified by TMP environment variable
 
 '''
-
-DEBUG = True # True will produce extra output text in terminal
 
 
 def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
@@ -50,20 +46,27 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
     :mapobjname: arbitrary name of map entry
     :margin: map cutoff distance around the ligand in angstroms
     The subroutine extracts map fragment around ligand atoms using the following protocol
-    NOTE: requires rw access to the folder with ddtrek file
-
     Algorithm:
     1. Generate 2Fo-Fc map from the specified MTZ file :mtzfilename:
     2. Save  fragment of the map around the ligand into temporary file
     3. load map into session
+
+    NOTE: this function requires rw access to the folder with ddtrek file
     '''
     mtz = gemmi.read_mtz_file(mtzfilename)
     m = gemmi.Ccp4Map()
     # ATM only 2Fo-Fc maps with column names 2FOFCWT or FTW(Refmac5)  are recognized
-    try:
-        m.grid = mtz.transform_f_phi_to_map('2FOFCWT','PH2FOFCWT', sample_rate=3)# column labels for mtz with map coefficients in Phenix and Buster
-    except:
-        m.grid = mtz.transform_f_phi_to_map('FWT','PHWT', sample_rate=3)#refmac5 default names for map coefficients
+    # TODO: add option to select type of map to draw
+    # Option to add:
+    # omit map "mFo-DFc_omit"  and phi "PHImFo-DFc_omit"
+    if 'polder' in mtzfilename:
+        #if filename contains word Polder, then extract omit map
+        m.grid = mtz.transform_f_phi_to_map('mFo-DFc_omit', 'PHImFo-DFc_omit', sample_rate=3)
+    else:
+        try:
+            m.grid = mtz.transform_f_phi_to_map('2FOFCWT','PH2FOFCWT', sample_rate=3)# column labels for mtz with map coefficients in Phenix and Buster
+        except:
+            m.grid = mtz.transform_f_phi_to_map('FWT','PHWT', sample_rate=3)#refmac5 default names for map coefficients
     m.update_ccp4_header()
     ligand = gemmi.read_structure('ligand.pdb') # if map file was specified, this file is generated in main body of DDtrek 
     # command below seems to generate Gb files of map fragments and overflows memory in PyMOL < 2.5
@@ -75,7 +78,7 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
     os.remove('ligand.pdb')
     return
 
-def ddtrek(input_filename: str) -> None:
+def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = True) -> None:
     '''
     DESCRIPTION
 
@@ -87,8 +90,11 @@ def ddtrek(input_filename: str) -> None:
 
     ddtrek [ path to input file ]
 
-    where
+    Variables
     :input_filename: path (absolute or relative) to DDtrek.in file
+    :coordinate_cutoff: distance from ligand in angstrom defines truncation radius
+    :map_cutoff: cutoff distance for map fragment. Passed to load_mtz_map_fragment as :margin:
+    :DEBUG: produces extra output into PyMOL terminal
     '''
 
     #Change working directory to location of input file
@@ -219,14 +225,15 @@ def ddtrek(input_filename: str) -> None:
         ### Generate symmetry mates 
         ### expand selection to nearby protein chains - useful when binding pocket is near crystallographic interface
         ### Protein chains will have unique segid
-        cmd.symexp(prefix='symmetry',object='current_entry',selection=ligand_residue, cutoff=4.5, segi=1)
+        cmd.symexp(prefix='symmetry',object='current_entry',selection=ligand_residue, cutoff=coordinate_cutoff, segi=1)
         # remove  atoms in symmetry mates beyond 6 A from the ligand in order to avoid unnecessary calculations
         cmd.remove("%s beyond 6 of %s" % ('symmetry*',ligand_residue))
 
         
-        # Now select the chain that contains the ligand, ligand itself and everything in 4.5 A radius around the ligand of interest. 
+        # Now select the chain that contains the ligand, ligand itself and everything in coordinate_cutoff radius around the ligand of interest. 
         # Select ligand, all closely situated protein chains and water molecules
-        tmp_selection = "current_entry and (%s or ((bychain %s around 4.5) and polymer) or (%s around 4.5 and resn HOH))" % (ligand_residue,ligand_residue,ligand_residue)
+        # TODO reformat string into new python way f'' and add cutoff distances as variables here
+        tmp_selection = "current_entry and (%s or ((bychain %s around 7) and polymer) or (%s around 7 and resn HOH))" % (ligand_residue,ligand_residue,ligand_residue)
         # now add symmetry mates to it
         extracted_selection = "(%s) or symmetry*" % tmp_selection
 
@@ -252,8 +259,8 @@ def ddtrek(input_filename: str) -> None:
         cmd.delete('current_entry') # remove original PDB
         cmd.delete('symmetry*') # remove symmetry mates
         
-        #Truncate atoms in new entry. Limit by 4.5 A radius around the ligand
-        pocket_selection = "(byres(%s within 4.5 of (%s and chain %s and resi %s)))" % (entry_name,entry_name,chain, resi)
+        #Truncate atoms in new entry. Limit by 7 A radius around the ligand
+        pocket_selection = "(byres(%s within 7 of (%s and chain %s and resi %s)))" % (entry_name,entry_name,chain, resi)
         cmd.remove("%s and not %s" % (entry_name, pocket_selection))
 
         # STYLING PDB
@@ -286,7 +293,12 @@ def ddtrek(input_filename: str) -> None:
         load_mtz_map_fragment(mtz, mtz_name)
         cmd.matrix_copy(entry_name, mtz_name)
         # pymol isomesh generation map at 1 sigma around ligand in 1.8 angstrom radius
-        cmd.isomesh(map_name, mtz_name, 1, ligand_selection, carve=1.8)
+        if 'omit' in map_name:
+            #contour omit maps at 3 sigma
+            cmd.isomesh(map_name, mtz_name, 3, ligand_selection, carve=1.8)
+        else:
+            #2Fo-Fc maps are contoured at 1 sigma level
+            cmd.isomesh(map_name, mtz_name, 1, ligand_selection, carve=1.8)
 
         # MAP REPRESENTATION 
         # color will match color of carbon atoms
