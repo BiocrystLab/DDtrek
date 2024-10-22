@@ -2,6 +2,10 @@
 DDTREK is a script for automatic generation of PyMOL session, which will 
 contain a reference structure, aligned structures 
 and (optional) electron density maps for ligands.
+
+It also includes command-line tools for map extraction from mtz or ccp4-map files.
+
+
 # REQUIREMENTS:
 - PyMOL version >= 2.5.0
 - Input document:
@@ -18,6 +22,12 @@ and (optional) electron density maps for ligands.
 
 - Click on the top menu "Plugin" and then on "Plugin manager".
 - click on the tab "Install New Plugin", click on "Choose file..." and select the file `DDtrek_plugin.zip` that you downloaded earlier.
+
+# HOW TO RUN
+Use one of the option.
+- Use GUI. After installation, new item 'DDtrek plugin' appears in PyMOL's 'Plugin' menu
+- Use CLI to run ddtrek:`ddtrek ddtrek.in` to call ddtrek using input file ddtrek.in
+- Use to extract map fragment: `map_extract <path to cryoEM MAP>, selection, margin`
 
 
 # TROUBLESHOOTING
