@@ -38,6 +38,87 @@ TODO:
 
 '''
 
+def map_extract(mapobj, selection, margin=3) -> None:
+    cmd.save('ligand.pdb', '%s' % (selection), format='pdb')
+    load_mtz_map_fragment(mapobj,'extracted_map')
+
+def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'ligand.pdb') -> None:
+    '''
+    DESCRIPTION
+    :mapfile: path to cryoem map file
+    :mapout: path to output file
+    :ligand: path to selection containing pdb
+    
+    '''
+    # 0. Load map into CcpMap
+    map_obj = gemmi.read_ccp4_map(mapfile,setup=True)
+    mapgrid = map_obj.grid
+    # 1. Define new unit cell confined within a box around the ligand
+    
+    lig_obj = gemmi.read_pdb(ligand)
+    box = lig_obj.calculate_box(margin=3)#box with + 3A from all atoms?
+    boxsize = box.get_size()
+    box_xdim = boxsize.x
+    box_ydim = boxsize.y
+    box_zdim = boxsize.z
+    gridspacing = mapgrid.spacing
+    start = box.minimum
+    startx = start.x
+    starty = start.y
+    startz = start.z
+    startpoint = [int(startx / gridspacing[0]), int(starty / gridspacing[1]), int(startz / gridspacing[2])]
+    boxgridsize = [int(box_xdim / gridspacing[0]), int(box_ydim / gridspacing[1]), int(box_zdim / gridspacing[2])]
+    # 2. copy section of input map into new object
+    mapfragment = mapgrid.get_subarray(start=startpoint, shape=boxgridsize)
+
+    ccptest = gemmi.Ccp4Map()
+    ccptest.grid = gemmi.FloatGrid(mapfragment)
+    # 3. adjust headers
+    ccptest.update_ccp4_header()
+    ccptest.grid.spacegroup=gemmi.SpaceGroup('P1')
+
+    '''
+    set size (1-3) and position(5-7) of map fragment inside ASU
+    1      NC              # of Columns    (fastest changing in map)
+    2      NR              # of Rows
+    3      NS              # of Sections   (slowest changing in map)
+    4      2 for REAL values of density map
+    5      NCSTART         Number of first COLUMN  in map
+    6      NRSTART         Number of first ROW     in map
+    7      NSSTART         Number of first SECTION in map
+    '''
+    for i,value in enumerate([*boxgridsize, 2, *startpoint]):
+        # x,y,z of start point
+        #
+        ccptest.set_header_i32(i+1, value)
+
+    '''
+    copy original unit cell params
+    8      NX              Number of intervals along X
+    9      NY              Number of intervals along Y
+    10      NZ              Number of intervals along Z
+
+    FROM: https://www.ccp4.ac.uk/html/maplib.html
+    '''
+    #
+    for i in [8,9,10]:
+        ccptest.set_header_i32(i,map_obj.header_i32(i))
+
+    # copy unit cell params
+    '''
+    11      X length        Cell Dimensions (Angstroms)
+    12      Y length                     "
+    13      Z length                     "
+    14      Alpha           Cell Angles     (Degrees)
+    15      Beta                         "
+    16      Gamma                        "
+    '''
+    for i in range(11,17):
+        ccptest.set_header_float(i,map_obj.header_float(i))
+
+
+    ccptest.update_ccp4_header()
+    ccptest.write_ccp4_map(mapout)
 
 def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
     '''
@@ -53,25 +134,30 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
 
     NOTE: this function requires rw access to the folder with ddtrek file
     '''
-    mtz = gemmi.read_mtz_file(mtzfilename)
-    m = gemmi.Ccp4Map()
-    # ATM only 2Fo-Fc maps with column names 2FOFCWT or FTW(Refmac5)  are recognized
-    # TODO: add option to select type of map to draw
-    # Option to add:
-    # omit map "mFo-DFc_omit"  and phi "PHImFo-DFc_omit"
-    if 'polder' in mtzfilename:
-        #if filename contains word Polder, then extract omit map
-        m.grid = mtz.transform_f_phi_to_map('mFo-DFc_omit', 'PHImFo-DFc_omit', sample_rate=3)
-    else:
-        try:
-            m.grid = mtz.transform_f_phi_to_map('2FOFCWT','PH2FOFCWT', sample_rate=3)# column labels for mtz with map coefficients in Phenix and Buster
-        except:
-            m.grid = mtz.transform_f_phi_to_map('FWT','PHWT', sample_rate=3)#refmac5 default names for map coefficients
-    m.update_ccp4_header()
     ligand = gemmi.read_structure('ligand.pdb') # if map file was specified, this file is generated in main body of DDtrek 
-    # command below seems to generate Gb files of map fragments and overflows memory in PyMOL < 2.5
-    m.set_extent(ligand.calculate_fractional_box(margin=margin)) #cut map fragment with margin around the ligand
-    m.write_ccp4_map('masked.ccp4')
+
+    if mtzfilename.endswith('mtz'):
+        mtz = gemmi.read_mtz_file(mtzfilename)
+        m = gemmi.Ccp4Map()
+        # ATM only 2Fo-Fc maps with column names 2FOFCWT or FTW(Refmac5)  are recognized
+        # TODO: add option to select type of map to draw
+        # Option to add:
+        # omit map "mFo-DFc_omit"  and phi "PHImFo-DFc_omit"
+        if 'polder' in mtzfilename:
+            #if filename contains word Polder, then extract omit map
+            m.grid = mtz.transform_f_phi_to_map('mFo-DFc_omit', 'PHImFo-DFc_omit', sample_rate=3)
+        else:
+            try:
+                m.grid = mtz.transform_f_phi_to_map('2FOFCWT','PH2FOFCWT', sample_rate=3)# column labels for mtz with map coefficients in Phenix and Buster
+            except:
+                m.grid = mtz.transform_f_phi_to_map('FWT','PHWT', sample_rate=3)#refmac5 default names for map coefficients
+        m.update_ccp4_header()
+        # command below seems to generate Gb files of map fragments and overflows memory in PyMOL < 2.5
+        m.set_extent(ligand.calculate_fractional_box(margin=margin)) #cut map fragment with margin around the ligand
+        m.write_ccp4_map('masked.ccp4')
+    elif mtzfilename.endswith('map'):
+        # load cryoEM map
+        load_cryoem_map_fragment(mtzfilename)
     cmd.load('masked.ccp4', mapobjname)
     # remove temporary files
     os.remove('masked.ccp4')
@@ -175,7 +261,7 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
         # load map mtz and check extension _ only mtz maps are allowed
         # TODO: may be rewrite this section. It looks terrible BUT it works...
         mtz = entry.split()[1]
-        if not mtz.lower().endswith('mtz'):
+        if not mtz.lower().endswith(('mtz','map','ccp4')):
             # if second element is not mtz
             mtz = None
             # finally, parse entry name,  selectors for the ligand (resi, chain) and optional alignment chain
@@ -327,3 +413,4 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = T
     #cmd.save('session.pse')
 
 cmd.extend("ddtrek", ddtrek)
+cmd.extend("map_extract", map_extract)
