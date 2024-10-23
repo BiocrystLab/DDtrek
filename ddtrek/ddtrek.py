@@ -38,7 +38,7 @@ TODO:
 
 '''
 
-DEBUG = True
+DEBUG = False
 
 def map_extract(mapobj, selection, margin=3) -> None:
     cmd.save('ligand.pdb', '%s' % (selection), format='pdb')
@@ -73,11 +73,11 @@ def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'liga
     # 2. copy section of input map into new object
     mapfragment = mapgrid.get_subarray(start=startpoint, shape=boxgridsize)
     if DEBUG:
-        print(mapfragment)
+        print("Extracted map fragment props:xyz of starting point and box size")
         print(list([*startpoint,*boxgridsize]))
     ccptest = gemmi.Ccp4Map()
     ccptest.grid = gemmi.FloatGrid(mapfragment)
-    # 3. adjust headers
+    # 3. adjust headers by specifying
     ccptest.update_ccp4_header()
     ccptest.grid.spacegroup=gemmi.SpaceGroup('P1')
 
