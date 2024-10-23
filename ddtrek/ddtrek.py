@@ -1,5 +1,6 @@
 import os
 import random
+import tempfile
 from pymol import cmd
 
 try:
@@ -38,7 +39,7 @@ TODO:
 
 '''
 
-DEBUG = False
+DEBUG = os.environ.get('DEBUG_DD',False)
 
 def map_extract(mapobj, selection, margin=9, savedmap='') -> None:
     '''
@@ -49,10 +50,14 @@ def map_extract(mapobj, selection, margin=9, savedmap='') -> None:
     Optinally, extracted map fragment could be saved in file specified by :savedmap:
     #TODO: add tab in UI to allow map extraction from there
     '''
+    tmp_dir = tempfile.gettempdir()
+    os.chdir(tmp_dir)
     cmd.save('ligand.pdb', f'{selection} or {selection} around {margin}', format='pdb')
-    load_mtz_map_fragment(mapobj,'extracted_map')
     if savedmap:
+        print(f'Saving {savedmap}')
         load_mtz_map_fragment(mapobj,'extracted_map',savedmap=savedmap)
+    else:
+        load_mtz_map_fragment(mapobj,'extracted_map')
 
 def load_cryoem_map_fragment(mapfile:str, savedmap='',mapout='masked.ccp4', ligand='ligand.pdb') -> None:
     '''
