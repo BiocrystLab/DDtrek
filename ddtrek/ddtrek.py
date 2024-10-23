@@ -44,7 +44,7 @@ def map_extract(mapobj, selection, margin=3) -> None:
     cmd.save('ligand.pdb', '%s' % (selection), format='pdb')
     load_mtz_map_fragment(mapobj,'extracted_map')
 
-def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'ligand.pdb') -> None:
+def load_cryoem_map_fragment(mapfile:str, savedmap='',mapout='masked.ccp4', ligand='ligand.pdb') -> None:
     '''
     DESCRIPTION
     :mapfile: path to cryoem map file
@@ -75,11 +75,11 @@ def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'liga
     if DEBUG:
         print("Extracted map fragment props:xyz of starting point and box size")
         print(list([*startpoint,*boxgridsize]))
-    ccptest = gemmi.Ccp4Map()
-    ccptest.grid = gemmi.FloatGrid(mapfragment)
+    ccp4map = gemmi.Ccp4Map()
+    ccp4map.grid = gemmi.FloatGrid(mapfragment)
     # 3. adjust headers by specifying
-    ccptest.update_ccp4_header()
-    ccptest.grid.spacegroup=gemmi.SpaceGroup('P1')
+    ccp4map.update_ccp4_header()
+    ccp4map.grid.spacegroup=gemmi.SpaceGroup('P1')
 
     '''
     set size (1-3) and position(5-7) of map fragment inside ASU
@@ -94,7 +94,7 @@ def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'liga
     for i,value in enumerate([*boxgridsize, 2, *startpoint]):
         # x,y,z of start point
         #
-        ccptest.set_header_i32(i+1, value)
+        ccp4map.set_header_i32(i+1, value)
 
     '''
     copy original unit cell params
@@ -106,7 +106,7 @@ def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'liga
     '''
     #
     for i in [8,9,10]:
-        ccptest.set_header_i32(i,map_obj.header_i32(i))
+        ccp4map.set_header_i32(i,map_obj.header_i32(i))
 
     # copy unit cell params
     '''
@@ -118,13 +118,15 @@ def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'liga
     16      Gamma                        "
     '''
     for i in range(11,17):
-        ccptest.set_header_float(i,map_obj.header_float(i))
+        ccp4map.set_header_float(i,map_obj.header_float(i))
 
 
-    ccptest.update_ccp4_header()
-    ccptest.write_ccp4_map(mapout)
+    ccp4map.update_ccp4_header()
+    ccp4map.write_ccp4_map(mapout)
+    if savedmap:
+        ccp4map.write_ccp4_map(savedmap)
 
-def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
+def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3, savedmap='') -> None:
     '''
     DESCRIPTION
     :mtzfilename: path to mtz map file
@@ -159,9 +161,12 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
         # command below seems to generate Gb files of map fragments and overflows memory in PyMOL < 2.5
         m.set_extent(ligand.calculate_fractional_box(margin=margin)) #cut map fragment with margin around the ligand
         m.write_ccp4_map('masked.ccp4')
-    elif mtzfilename.endswith(('map','map.gz')):
+        if savedmap:
+            m.write_ccp4_map(savedmap)
+
+    elif mtzfilename.endswith(('ccp4','map','map.gz')):
         # load cryoEM map
-        load_cryoem_map_fragment(mtzfilename)
+        load_cryoem_map_fragment(mtzfilename,savedmap)
     cmd.load('masked.ccp4', mapobjname)
     # remove temporary files
     os.remove('masked.ccp4')
