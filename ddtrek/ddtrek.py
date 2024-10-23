@@ -38,6 +38,8 @@ TODO:
 
 '''
 
+DEBUG = True
+
 def map_extract(mapobj, selection, margin=3) -> None:
     cmd.save('ligand.pdb', '%s' % (selection), format='pdb')
     load_mtz_map_fragment(mapobj,'extracted_map')
@@ -70,7 +72,9 @@ def load_cryoem_map_fragment(mapfile:str, mapout = 'masked.ccp4', ligand = 'liga
     boxgridsize = [int(box_xdim / gridspacing[0]), int(box_ydim / gridspacing[1]), int(box_zdim / gridspacing[2])]
     # 2. copy section of input map into new object
     mapfragment = mapgrid.get_subarray(start=startpoint, shape=boxgridsize)
-
+    if DEBUG:
+        print(mapfragment)
+        print(list([*startpoint,*boxgridsize]))
     ccptest = gemmi.Ccp4Map()
     ccptest.grid = gemmi.FloatGrid(mapfragment)
     # 3. adjust headers
@@ -155,7 +159,7 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
         # command below seems to generate Gb files of map fragments and overflows memory in PyMOL < 2.5
         m.set_extent(ligand.calculate_fractional_box(margin=margin)) #cut map fragment with margin around the ligand
         m.write_ccp4_map('masked.ccp4')
-    elif mtzfilename.endswith('map'):
+    elif mtzfilename.endswith(('map','map.gz')):
         # load cryoEM map
         load_cryoem_map_fragment(mtzfilename)
     cmd.load('masked.ccp4', mapobjname)
@@ -164,7 +168,7 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3) -> None:
     os.remove('ligand.pdb')
     return
 
-def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, DEBUG = True) -> None:
+def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7) -> None:
     '''
     DESCRIPTION
 
