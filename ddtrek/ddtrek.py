@@ -40,9 +40,19 @@ TODO:
 
 DEBUG = False
 
-def map_extract(mapobj, selection, margin=3) -> None:
-    cmd.save('ligand.pdb', '%s' % (selection), format='pdb')
+def map_extract(mapobj, selection, margin=9, savedmap='') -> None:
+    '''
+    DESCRIPTION
+    For a given :selection: and atoms within :margin: extracts its density map 
+    from the file specified in :mapobj:
+    
+    Optinally, extracted map fragment could be saved in file specified by :savedmap:
+    #TODO: add tab in UI to allow map extraction from there
+    '''
+    cmd.save('ligand.pdb', f'{selection} or {selection} around {margin}', format='pdb')
     load_mtz_map_fragment(mapobj,'extracted_map')
+    if savedmap:
+        load_mtz_map_fragment(mapobj,'extracted_map',savedmap=savedmap)
 
 def load_cryoem_map_fragment(mapfile:str, savedmap='',mapout='masked.ccp4', ligand='ligand.pdb') -> None:
     '''
