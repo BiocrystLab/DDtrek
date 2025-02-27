@@ -368,7 +368,7 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7) -> None:
             alignment_selection = "%s and polymer and name CA" % (entry_name)
         if DEBUG:
             print('Alignment selection:%s\n' % alignment_selection)
-        cmd.align(alignment_selection, 'reference and name CA') # align using C-alpha atoms to reference
+        cmd.super(alignment_selection, 'reference and name CA') # align using C-alpha atoms to reference
 
         #Cleanup. Remove temporary PDB and its generated symmetry mates
         cmd.delete('current_entry') # remove original PDB
