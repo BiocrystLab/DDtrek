@@ -188,7 +188,7 @@ def load_mtz_map_fragment(mtzfilename:str, mapobjname:str, margin=3, savedmap=''
     os.remove('ligand.pdb')
     return
 
-def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7) -> None:
+def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, mesh_expland = False) -> None:
     '''
     DESCRIPTION
 
@@ -407,13 +407,23 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7) -> None:
         map_name = entry_name + '_mesh' 
         load_mtz_map_fragment(mtz, mtz_name)
         cmd.matrix_copy(entry_name, mtz_name)
-        # pymol isomesh generation map at 1 sigma around ligand in 1.8 angstrom radius
-        if 'omit' in map_name:
+        # TODO: draw maps for CryoEM extracted maps as well
+        if mesh_expland:
+            # draw mesh for the whole box
+            if 'omit' in map_name:
             #contour omit maps at 3 sigma
-            cmd.isomesh(map_name, mtz_name, 3, ligand_selection, carve=1.8)
-        else:
+                cmd.isomesh(map_name, mtz_name, 3)
+            else:
             #2Fo-Fc maps are contoured at 1 sigma level
-            cmd.isomesh(map_name, mtz_name, 1, ligand_selection, carve=1.8)
+                cmd.isomesh(map_name, mtz_name, 1)
+        else:
+            # pymol isomesh generation map at 1 sigma around ligand in 1.8 angstrom radius
+            if 'omit' in map_name:
+                #contour omit maps at 3 sigma
+                cmd.isomesh(map_name, mtz_name, 3, ligand_selection, carve=1.8)
+            else:
+                #2Fo-Fc maps are contoured at 1 sigma level
+                cmd.isomesh(map_name, mtz_name, 1, ligand_selection, carve=1.8)
 
         # MAP REPRESENTATION 
         # color will match color of carbon atoms

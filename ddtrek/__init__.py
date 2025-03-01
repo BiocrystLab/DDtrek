@@ -95,9 +95,10 @@ def make_dialog():
         run ddtrek using filename in text field
         '''
         fname = form.input_filename_2.text()
+        mesh_expand = form.checkBox_2.isChecked()
         if fname:
             print(f'Opening {fname}...')
-            ddtrek(fname)
+            ddtrek(fname, mesh_expland=mesh_expand)
             dialog.close()
 
     def extract():
