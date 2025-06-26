@@ -50,4 +50,20 @@ See examples folder for two specific examples.
 Some common errors:
 
 - Error `Selector-Error: Invalid selection name "current_entry".` with PyMOL failing to create a new object. It is not exacly clear, what causes this error. **Solution**: close and open PyMOL, and rerun DDtrek
-- Error `gemmi is not definded`: `DDtrek` attempts to install dependency automatically using `pip`. This might fail on Linux machines if user doesn't have access to PyMOL installation, e.g. when PyMOL installed using package manager. **Solution**: Ask system administrator to install `gemmi` package using `sudo pip install gemmi`
+- Error `gemmi is not definded`: `DDtrek` attempts to install dependency automatically using `pip`. This might fail on Linux machines if user doesn't have access to PyMOL installation, e.g. when PyMOL installed using package manager. **Solution**: Ask system administrator to install `gemmi` package using `sudo pip install gemmi` or run PyMOL as administrator
+
+# Citing
+If you find DDtrek useful, please cite it:
+```
+@article{Osipov_2025,
+  title = {DDtrek: A PyMOL-Based Management System for 3D Structural Data Series},
+  shorttitle = {DDtrek},
+  author = {Osipov, Evgenii M. and Strelkov, Sergei V.},
+  year = {2025},
+  journal = {ACS Omega},
+  publisher = {American Chemical Society},
+  doi = {10.1021/acsomega.4c07417},
+  urldate = {2025-05-26},
+  abstract = {In multiple areas of molecular biology research, series of closely related atomic structures of biomacromolecules are routinely generated. In particular, rational structure-based drug design heavily relies on the structural analysis of experimentally determined complexes between the target protein and multiple designed ligands (small molecules or biologicals). Here, we introduce DDtrek, a system for alignment, evaluation, and presentation of such structural data. This system is implemented as a plugin for the highly popular molecular graphics software PyMOL. A special feature of DDtrek is visualization of the aligned ligand structures together with the corresponding experimental density maps obtained through X-ray crystallography or cryoelectron microscopy, providing for the assessment of atomic model reliability and partial disorder. DDtrek is a lightweight and user-friendly system that can be utilized by whole research teams. DDtrek is freely available for Windows, MacOS, and Linux from https://github.com/BiocrystLab/DDtrek.},
+}
+```
