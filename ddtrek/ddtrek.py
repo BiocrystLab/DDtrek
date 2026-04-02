@@ -115,7 +115,7 @@ def load_cryoem_map_fragment(mapfile:str, savedmap='',mapout='masked.ccp4', liga
     copy original unit cell params
     8      NX              Number of intervals along X
     9      NY              Number of intervals along Y
-    10      NZ              Number of intervals along Z
+    10     NZ              Number of intervals along Z
 
     FROM: https://www.ccp4.ac.uk/html/maplib.html
     '''
@@ -277,9 +277,9 @@ def ddtrek(input_filename: str, coordinate_cutoff = 7, map_cutoff = 7, mesh_expl
         #split every line into corresponding elements
         
         pdb = entry.split()[0]
-        # discard non-PDB lines and malformed lines
-        if not pdb.lower().endswith('pdb') or (pdb.lower().endswith('pdb') and len(entry.split())) < 4:
-            print('Malformed line with PDB %s . Check pdb filename and presence of all elements. Skipping...' % pdb )
+        # discard non-PDB /non-CIFlines and malformed lines
+        if not pdb.lower().endswith(('pdb','cif')) or (pdb.lower().endswith(('pdb','cif')) and len(entry.split())) < 4:
+            print('Malformed line with coordinates %s. Check filenames and presence of all elements. Skipping...' % pdb )
             continue
 
         # load map mtz and check extension _ only mtz maps are allowed
